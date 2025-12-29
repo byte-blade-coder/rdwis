@@ -273,7 +273,7 @@
 
             <div class="section-header">
                 <h4>Activities & Milestones</h4>
-                <button class="btn btn-outline-primary btn-sm">Add Milestone</button>
+                <button class="btn btn-outline-primary btn-sm"><a href="{{route('addmilestonepr')}}">Add Milestone</a></button>
             </div>
 
             <div class="table-responsive">

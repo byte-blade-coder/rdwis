@@ -16,7 +16,7 @@
                     <div class="project-desc">Demo CDS Project for PNS Vessel</div>
                     <span class="badge-custom">Demo Comm</span>
                 </div>
-                <a href="{{route('viewproject')}}" class="btn-view">View Project</a>
+                <a href="{{route('openprojectdetails')}}" class="btn-view">View Project</a>
             </div>
             <div class="timeline-wrapper">
                 <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Approval</div><div class="meta-date">(04 Oct 21)</div></div> 
@@ -36,7 +36,7 @@
                     <div class="project-desc">Development of Data System for Demo PMSA</div>
                     <span class="badge-custom">Demo Comm</span>
                 </div>
-                <a href="{{route('viewproject')}}" class="btn-view">View Project</a>
+                <a href="{{route('openprojectdetails')}}" class="btn-view">View Project</a>
             </div>
             <div class="timeline-wrapper">
                 <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Approval</div><div class="meta-date">(22 Dec 22)</div></div>
@@ -56,7 +56,7 @@
                     <div class="project-desc">Network Operations Center Upgrade Phase 2</div>
                     <span class="badge-custom" style="background-color: #28a745;">Deployed</span>
                 </div>
-                <a href="{{route('viewproject')}}" class="btn-view">View Project</a>
+                <a href="{{route('openprojectdetails')}}" class="btn-view">View Project</a>
             </div>
             <div class="timeline-wrapper">
                 <div class="timeline-item"><div class="progress-segment bg-success"></div><div class="meta-text">Approval</div><div class="meta-date">(10 Jan 23)</div></div>
@@ -76,7 +76,7 @@
                     <div class="project-desc">Enterprise Resource Planning - Fleet Module</div>
                     <span class="badge-custom" style="background-color: #dc3545;">Halted</span>
                 </div>
-                <a href="{{route('viewproject')}}" class="btn-view">View Project</a>
+                <a href="{{route('openprojectdetails')}}" class="btn-view">View Project</a>
             </div>
             <div class="timeline-wrapper">
                 <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Initiation</div><div class="meta-date">(01 Nov 22)</div></div>
@@ -96,7 +96,7 @@
                     <div class="project-desc">Cyber Security Infrastructure Audit</div>
                     <span class="badge-custom" style="background-color: #17a2b8;">New</span>
                 </div>
-                <a href="{{route('viewproject')}}" class="btn-view">View Project</a>
+                <a href="{{route('openprojectdetails')}}" class="btn-view">View Project</a>
             </div>
             <div class="timeline-wrapper">
                 <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Kick-off</div><div class="meta-date">(Today)</div></div>
