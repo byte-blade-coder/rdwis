@@ -246,6 +246,7 @@
 </li>
 
 <!-- ================= PURCHASE CASES ================= -->
+
 <li class="nav-item">
   <a href="#" class="nav-link">
     <i class="nav-icon fas fa-shopping-cart"></i>
@@ -253,30 +254,21 @@
   </a>
 
   <ul class="nav nav-treeview">
-
     <li class="nav-item">
-      <a href="#" class="nav-link">
+      <a href="{{ route('viewpurchasecase') }}" class="nav-link">
         <i class="fas fa-briefcase nav-icon"></i>
-        <p>PURCHASE CASES (PCs) <i class="right fas fa-angle-left"></i></p>
+        <p>PURCHASE CASES (PCs)</p>
       </a>
-
-      <ul class="nav nav-treeview">
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-folder-open nav-icon"></i><p>OPEN PCs</p></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-lock nav-icon"></i><p>CLOSED PCs</p></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-pencil-alt nav-icon"></i><p>DRAFT PCs</p></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-plus nav-icon"></i><p>CREATE NEW PCs</p></a></li>
-      </ul>
     </li>
 
     <li class="nav-item">
       <a href="#" class="nav-link">
         <i class="fas fa-receipt nav-icon"></i>
-        <p>RECEIPTS <i class="right fas fa-angle-left"></i></p>
+        <p>RECEIPTS</i></p>
       </a>
 
       <ul class="nav nav-treeview">
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-edit nav-icon"></i><p>DRAFT RECEIPTS</p></a></li>
-        <li class="nav-item"><a href="#" class="nav-link"><i class="fas fa-check nav-icon"></i><p>CLOSED RECEIPTS</p></a></li>
+        <!-- Nested items removed -->
       </ul>
     </li>
 
@@ -287,10 +279,8 @@
         <p>CASES WITHOUT ITEMS</p>
       </a>
     </li>
-
   </ul>
 </li>
-
 <!-- ================= HUMAN RESOURCES ================= -->
 <li class="nav-item">
   <a href="#" class="nav-link">

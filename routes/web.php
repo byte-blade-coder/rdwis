@@ -45,3 +45,17 @@ Route::get('/openmprs', function () {
 Route::get('/viewmpr', function () {
     return view('projects.viewmpr');
 })->name('viewmpr');
+
+// Purchase Cases (PCs)
+
+Route::get('/createnewcase', function () {
+    return view('purchase.new_case.createnewcase');
+})->name('createnewcase');
+
+Route::get('/purchasecasedetails', function () {
+    return view('purchase.new_case.purchasecasedetails');
+})->name('purchasecasedetails');
+
+Route::get('/viewpurchasecase', function () {
+    return view('purchase.new_case.viewpurchasecase');
+})->name('viewpurchasecase');
