@@ -217,45 +217,14 @@
     <p>PROJECTS <i class="right fas fa-angle-left"></i></p>
   </a>
 
-  <ul class="nav nav-treeview">
-
-    <li class="nav-item">
-      <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-folder"></i>
-        <p>PROJECTS <i class="right fas fa-angle-left"></i></p>
-      </a>
-
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a href="{{route('viewopenproject')}}" class="nav-link">
+          <a href="{{route('viewprojects')}}" class="nav-link">
             <i class="fas fa-folder-open nav-icon"></i>
-            <p>OPEN PROJECTS</p>
+            <p>PROJECTS</p>
           </a>
         </li>
-
-        <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="fas fa-plus-circle nav-icon"></i>
-            <p>CREATE PROJECT</p>
-          </a>
-        </li>
-
-        <li class="nav-item">
-          <a href="{{route('viewcloseproject')}}" class="nav-link">
-            <i class="fas fa-lock nav-icon"></i>
-            <p>CLOSED PROJECTS</p>
-          </a>
-        </li>
-      </ul>
-    </li>
-
-    <li class="nav-item">
-      <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-chart-line"></i>
-        <p>MONTHLY RETURN <i class="right fas fa-angle-left"></i></p>
-      </a>
-
-      <ul class="nav nav-treeview">
+        
         <li class="nav-item">
           <a href="#" class="nav-link">
             <i class="fas fa-file-alt nav-icon"></i>
@@ -263,9 +232,6 @@
           </a>
         </li>
       </ul>
-    </li>
-
-  </ul>
 </li>
 
 <!-- ================= PURCHASE CASES ================= -->
