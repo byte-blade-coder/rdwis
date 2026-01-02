@@ -2,25 +2,32 @@
 
 @section('content')
 <div class="content-wrapper">
+
+    {{-- HEADER --}}
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-4 align-items-center">
-                
+
                 <div class="col-md-4 col-sm-12">
-                    <h1 id="page-heading" class="m-0" style="font-weight: 700;">All Projects</h1>
+                    <h1 id="page-heading" class="m-0 font-weight-bold">All Projects</h1>
                 </div>
 
                 <div class="col-md-4 col-sm-12 text-center my-2">
-                    <a href="{{route('addnewproject')}}" class="btn btn-success shadow-sm" style="border-radius: 20px; padding: 8px 25px;">
+                    <a href="{{ route('addnewproject') }}"
+                       class="btn btn-success shadow-sm px-4"
+                       style="border-radius:20px;">
                         <i class="fas fa-plus-circle mr-1"></i> Create New Project
                     </a>
                 </div>
 
                 <div class="col-md-4 col-sm-12 text-right">
                     <div class="btn-group shadow-sm">
-                        <button type="button" class="btn btn-outline-primary active" onclick="filterProjects('all', 'All Projects', this)">All</button>
-                        <button type="button" class="btn btn-outline-primary" onclick="filterProjects('open', 'Open Projects', this)">Open</button>
-                        <button type="button" class="btn btn-outline-primary" onclick="filterProjects('closed', 'Closed Projects', this)">Closed</button>
+                        <button class="btn btn-outline-primary active"
+                                onclick="filterProjects('all','All Projects',this)">All</button>
+                        <button class="btn btn-outline-primary"
+                                onclick="filterProjects('open','Open Projects',this)">Open</button>
+                        <button class="btn btn-outline-primary"
+                                onclick="filterProjects('closed','Closed Projects',this)">Closed</button>
                     </div>
                 </div>
 
@@ -28,116 +35,147 @@
         </div>
     </div>
 
+    {{-- CONTENT --}}
     <div class="content">
         <div class="container-fluid">
 
-            <div class="card project-card shadow-sm mb-4" data-status="open">
+            @forelse($projects as $project)
+
+            <div class="card project-card shadow-sm mb-4"
+                 data-status="{{ Str::lower($project->prj_status) }}">
+
                 <div class="card-body">
-                    <div class="project-header d-flex justify-content-between align-items-center">
-                        <div class="project-title">
-                            <h3>CDS</h3>
-                            <div class="project-desc text-muted">Demo CDS Project for PNS Vessel</div>
-                            <span class="badge badge-primary px-3 py-2">Demo Comm</span>
+
+                    {{-- PROJECT HEADER --}}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h3 class="mb-1">{{ $project->prj_code }}</h3>
+                            <div class="text-muted">{{ $project->prj_title }}</div>
+
+                            @php
+                                $badge = match(Str::lower($project->prj_status)){
+                                    'open'   => 'badge-primary',
+                                    'closed' => 'badge-success',
+                                    'hold'   => 'badge-warning',
+                                    default  => 'badge-secondary'
+                                };
+                            @endphp
+
+                            <span class="badge {{ $badge }} px-3 py-2 mt-2">
+                                {{ strtoupper($project->prj_status) }}
+                            </span>
                         </div>
-                        <a href="{{route('openprojectdetails')}}" class="btn btn-primary btn-sm px-4">View Project</a>
+
+                        <a href="{{ route('projects.show',$project->prj_id) }}"
+                           class="btn btn-primary btn-sm px-4">
+                            View Project
+                        </a>
                     </div>
-                    <div class="timeline-wrapper mt-3">
-                        <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Approval</div><div class="meta-date">(04 Oct 21)</div></div> 
-                        <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Start</div><div class="meta-date">(20 Oct 21)</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-success"></div><div class="meta-text">Work in Progress</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-secondary"></div><div class="meta-text">Warranty</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-secondary"></div><div class="meta-text">EDC</div><div class="meta-date">(20 Jul 22)</div></div>
+
+                    {{-- TIMELINE --}}
+                    <div class="timeline-wrapper mt-4">
+
+                        <div class="timeline-item">
+                            <div class="progress-segment bg-primary"></div>
+                            <div class="meta-text">Approval</div>
+                            <div class="meta-date">
+                                {{ optional($project->created_at)->format('d M Y') }}
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="progress-segment bg-primary"></div>
+                            <div class="meta-text">Start</div>
+                            <div class="meta-date">
+                                {{ \Carbon\Carbon::parse($project->prj_startdt)->format('d M Y') }}
+                            </div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="progress-segment
+                                {{ Str::lower($project->prj_status)=='open' ? 'bg-success':'bg-secondary' }}">
+                            </div>
+                            <div class="meta-text">Work In Progress</div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="progress-segment bg-secondary"></div>
+                            <div class="meta-text">Warranty</div>
+                        </div>
+
+                        <div class="timeline-item">
+                            <div class="progress-segment bg-secondary"></div>
+                            <div class="meta-text">EDC</div>
+                            <div class="meta-date">
+                                {{ $project->prj_enddt ? \Carbon\Carbon::parse($project->prj_enddt)->format('d M Y') : 'TBD' }}
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
             </div>
 
-            <div class="card project-card shadow-sm mb-4" data-status="closed">
-                <div class="card-body">
-                    <div class="project-header d-flex justify-content-between align-items-center">
-                        <div class="project-title">
-                            <h3>NOC-V2</h3>
-                            <div class="project-desc text-muted">Network Operations Center Upgrade Phase 2</div>
-                            <span class="badge badge-success px-3 py-2">Deployed</span>
-                        </div>
-                        <a href="{{route('openprojectdetails')}}" class="btn btn-primary btn-sm px-4">View Project</a>
-                    </div>
-                    <div class="timeline-wrapper mt-3">
-                        <div class="timeline-item"><div class="progress-segment bg-success"></div><div class="meta-text">Approval</div><div class="meta-date">(10 Jan 23)</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-success"></div><div class="meta-text">Development</div><div class="meta-date">(15 Feb 23)</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-success"></div><div class="meta-text">Testing</div><div class="meta-date">(01 Mar 23)</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-success"></div><div class="meta-text">Warranty</div><div class="meta-date">Active</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-success"></div><div class="meta-text">Handover</div><div class="meta-date">(10 Mar 23)</div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card project-card shadow-sm mb-4" data-status="open">
-                <div class="card-body">
-                    <div class="project-header d-flex justify-content-between align-items-center">
-                        <div class="project-title">
-                            <h3>ERP-FMS</h3>
-                            <div class="project-desc text-muted">Enterprise Resource Planning - Fleet Module</div>
-                            <span class="badge badge-danger px-3 py-2">Halted</span>
-                        </div>
-                        <a href="{{route('openprojectdetails')}}" class="btn btn-primary btn-sm px-4">View Project</a>
-                    </div>
-                    <div class="timeline-wrapper mt-3">
-                        <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Initiation</div><div class="meta-date">(01 Nov 22)</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-primary"></div><div class="meta-text">Design</div><div class="meta-date">(15 Nov 22)</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-danger"></div><div class="meta-text">Vendor Issue</div><div class="meta-date">Stopped</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-secondary"></div><div class="meta-text">Integration</div></div>
-                        <div class="timeline-item"><div class="progress-segment bg-secondary"></div><div class="meta-text">Live</div><div class="meta-date">(TBD)</div></div>
-                    </div>
-                </div>
-            </div>
+            @empty
+                <div class="alert alert-info">No projects found.</div>
+            @endforelse
 
         </div>
     </div>
 </div>
 
+{{-- FILTER SCRIPT --}}
 <script>
-function filterProjects(status, headingText, btnElement) {
-    // 1. Heading Update
-    document.getElementById('page-heading').innerText = headingText;
+function filterProjects(status, heading, btn){
+    document.getElementById('page-heading').innerText = heading;
 
-    // 2. Active Button State (Passing 'this' or btnElement ensures correct event handling)
-    let buttons = document.querySelectorAll('.btn-group .btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    
-    // Check if event exists (for click) or use btnElement directly
-    if(btnElement) {
-        btnElement.classList.add('active');
-    } else if(window.event) {
-        window.event.target.classList.add('active');
-    }
+    document.querySelectorAll('.btn-group .btn')
+        .forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
 
-    // 3. Filtering Cards
-    let cards = document.querySelectorAll('.project-card');
-    cards.forEach(card => {
-        if (status === 'all') {
-            card.style.display = 'block';
-        } else {
-            card.style.display = (card.getAttribute('data-status') === status) ? 'block' : 'none';
-        }
+    document.querySelectorAll('.project-card').forEach(card=>{
+        card.style.display =
+            (status==='all' || card.dataset.status===status)
+            ? 'block' : 'none';
     });
 }
 </script>
 
+{{-- STYLES --}}
 <style>
-    /* Spacing and visual polish */
-    .project-card { 
-        transition: transform 0.2s ease, box-shadow 0.2s ease; 
-        border: none;
-        border-radius: 10px;
-    }
-    .project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
-    }
-    .btn-group .btn.active { 
-        background-color: #007bff !important; 
-        color: white !important; 
-    }
-    .badge { font-weight: 500; }
+.project-card{
+    border:none;
+    border-radius:10px;
+    transition:.2s ease;
+}
+.project-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 6px 18px rgba(0,0,0,.12);
+}
+.timeline-wrapper{
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+}
+.timeline-item{
+    text-align:center;
+    flex:1;
+}
+.progress-segment{
+    height:6px;
+    border-radius:4px;
+    margin-bottom:6px;
+}
+.meta-text{
+    font-weight:600;
+}
+.meta-date{
+    font-size:12px;
+    color:#6c757d;
+}
+.btn-group .btn.active{
+    background:#007bff;
+    color:#fff;
+}
 </style>
 @endsection

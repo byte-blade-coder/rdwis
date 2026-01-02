@@ -1,30 +1,50 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectController; // <-- Ye line sabse zyada zaroori hai!
 
-
-//master 
+// Master Route
 Route::get('/', function () {
     return view('index');
 })->name('index');
 
 
-//for projects of div
-Route::get('/viewprojects', function () {
-    return view('projects.viewprojects');
-})->name('viewprojects');
+// --- Project Module Routes ---
 
-Route::get('/openprojectdetails', function () {
-    return view('projects.openprojectdetails');
-})->name('openprojectdetails');
+// 1. View All Projects (Ye ab Controller ke index method par jayega)
+Route::get('/viewprojects', [ProjectController::class, 'index'])->name('viewprojects');
+
+// 2. Project Details (Yahan '{id}' lagaya hai taaki specific project ka data mile)
+// Example URL: /openprojectdetails/1
+Route::get('/openprojectdetails/{id}', [ProjectController::class, 'show'])->name('projects.show');
+
+// 3. Create New Project Page (Filhal static hai, baad mein iska bhi controller banega)
+Route::get('/addnewproject', function () {
+    return view('projects.addnewproject');
+})->name('addnewproject');
+
+
+// --- Other Static Pages (Filhal aise hi rehne dein) ---
 
 Route::get('/addmilestonepr', function () {
     return view('projects.addmilestonepr');
 })->name('addmilestonepr');
 
-Route::get('/addnewproject', function () {
-    return view('projects.addnewproject');
-})->name('addnewproject');
+Route::get('/projecthistory', function () {
+    return view('projects.projecthistory');
+})->name('projecthistory');
+
+Route::get('/gantchartpr', function () {
+    return view('projects.gantchartpr');
+})->name('gantchartpr');
+
+Route::get('/openmprs', function () {
+    return view('projects.openmprs');
+})->name('openmprs');
+
+Route::get('/viewmpr', function () {
+    return view('projects.viewmpr');
+})->name('viewmpr');
 
 // Purchase Cases (PCs)
 

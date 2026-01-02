@@ -25,13 +25,24 @@
   <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+<link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/jqvmap/jqvmap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+<link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
+
+  <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+<script src="{{ asset('dist/js/adminlte.js') }}"></script>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="dist/img/withoutbgrdwlogofull.png" alt="Logoo" height="400px" width="300px">
+    <img class="animation__shake" src="{{ asset('dist/img/withoutbgrdwlogohalf.png') }}" alt="Logoo" height="400px" width="300px">
   </div>
 
   <!-- Navbar -->
@@ -178,7 +189,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{{route('index')}}" class="brand-link">
-      <img src="dist/img/logordwhalf.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{{ asset('dist/img/withoutbgrdwlogohalf.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">RDWIS</span>
     </a>
 
@@ -226,7 +237,7 @@
         </li>
         
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="{{route('openmprs')}}" class="nav-link">
             <i class="fas fa-file-alt nav-icon"></i>
             <p>PREPARE MPR</p>
           </a>
@@ -235,6 +246,7 @@
 </li>
 
 <!-- ================= PURCHASE CASES ================= -->
+
 <li class="nav-item">
   <a href="#" class="nav-link">
     <i class="nav-icon fas fa-shopping-cart"></i>
@@ -269,8 +281,6 @@
     </li>
   </ul>
 </li>
-
-
 <!-- ================= HUMAN RESOURCES ================= -->
 <li class="nav-item">
   <a href="#" class="nav-link">
