@@ -121,7 +121,7 @@
             <div class="card-header d-flex align-items-center justify-content-between p-2">
                 <h3 class="card-title text-bold m-0 pl-2" style="font-size: 1.2rem;">
                     <i class="fas fa-project-diagram mr-2 text-primary"></i> 
-                    Project ID: #{{ $project->id ?? 'NEW' }}
+                    Project ID: #{{ $project->prj_id }}
                 </h3>
 
                 <div class="header-controls">
@@ -255,7 +255,9 @@
 
                         <div class="section-header">
                             <span><i class="fas fa-tasks mr-1"></i> Activities & Milestones</span>
-                            <a href="{{route('addmilestonepr')}}" class="btn btn-primary btn-xs"><i class="fas fa-plus-circle"></i> New Milestone</a>
+                            <a href="{{ route('projects.add-milestone', $project->prj_id) }}" class="btn btn-primary btn-xs">
+    <i class="fas fa-plus-circle"></i> New Milestone
+</a>
                         </div>
 
                         <div class="milestone-scroll">

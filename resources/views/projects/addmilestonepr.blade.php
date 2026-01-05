@@ -101,66 +101,66 @@
             .form-group label { text-align: left; width: 100%; margin-bottom: 5px; }
         }
     </style>
-  <div class="card">
-        <div class="card-header">
-            <h3 class="card-title">Milestone/Activity Detail</h3>
-        </div>
-       
-        <form>
-            <div class="card-body">
-               
-                <div class="form-group">
-                    <label>Number</label>
-                    <div class="input-wrapper">
-                        <input type="text" class="form-control" style="width: 100px;" placeholder="#">
-                    </div>
+  
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    {{-- Project ka naam dikhayenge taaki confusion na ho --}}
+                    <h3 class="card-title">Add Milestone for Project: <strong>{{ $project->prj_title }}</strong> (ID: {{ $project->prj_id }})</h3>
                 </div>
 
-                <div class="form-group">
-                    <label>Type</label>
-                    <div class="input-wrapper">
-                        <select class="form-control" style="width: 200px;">
-                            <option selected>Milestone</option>
-                            <option>Activity</option>
-                        </select>
-                    </div>
-                </div>
+                {{-- Form Action: Ye data ko storeMilestone function pe bhejega --}}
+                <form action="{{ route('projects.store-milestone', $project->prj_id) }}" method="POST">
+                    @csrf {{-- Security Token Zaroori hai --}}
+                    
+                    <div class="card-body">
+                        <div class="row">
+                            {{-- Milestone Description --}}
+                            <div class="col-md-6 form-group">
+                                <label>Milestone Description / Title</label>
+                                <input type="text" name="msn_desc" class="form-control" placeholder="e.g. Foundation Complete" required>
+                            </div>
 
-                <div class="form-group">
-                    <label>Description</label>
-                    <div class="input-wrapper">
-                        <input type="text" class="form-control" placeholder="Enter description">
-                    </div>
-                </div>
+                            {{-- Target Date --}}
+                            <div class="col-md-6 form-group">
+                                <label>Target Date</label>
+                                <input type="date" name="msn_targetdt" class="form-control" required>
+                            </div>
+                        </div>
 
-                <div class="form-group">
-                    <label>Target Date</label>
-                    <div class="input-wrapper">
-                        <input type="date" class="form-control" style="width: 180px;">
-                    </div>
-                </div>
+                        <div class="row">
+                            {{-- Type Dropdown --}}
+                            <div class="col-md-6 form-group">
+                                <label>Type</label>
+                                <select name="msn_type" class="form-control">
+                                    <option value="Physical">Physical</option>
+                                    <option value="Financial">Financial</option>
+                                    <option value="General">General</option>
+                                </select>
+                            </div>
 
-                <div class="form-group">
-                    <label>Status</label>
-                    <div class="input-wrapper">
-                        <select class="form-control" style="width: 200px;">
-                            <option selected>Not started</option>
-                            <option>Awaited</option>
-                            <option>Held up</option>
-                            <option>In progress</option>
-                            <option>Completed</option>
-                        </select>
+                            {{-- Status Dropdown --}}
+                            <div class="col-md-6 form-group">
+                                <label>Status</label>
+                                <select name="msn_status" class="form-control">
+                                    <option value="Pending">Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-            </div> <div class="card-footer">
-                <button type="button" class="btn btn-default">Cancel</button>
-                <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <div class="card-footer text-right">
+                        {{-- Cancel button wapis details page par le jayega --}}
+                        <a href="{{ route('projects.show', $project->prj_id) }}" class="btn btn-default">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Milestone</button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-
-</div>
+        </div>
+    </section>
 
 
 @endsection

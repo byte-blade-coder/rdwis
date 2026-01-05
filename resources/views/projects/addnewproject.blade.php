@@ -55,65 +55,49 @@
         }
     </style>
 
-    <div class="container-fluid">
-        <div class="card card-add-project">
-            <div class="form-header">
-                <h3><i class="fas fa-plus-circle mr-2 text-primary"></i> Add New Project</h3>
-            </div>
-            
-            <form action="#" method="POST">
-                @csrf
-                <div class="card-body px-4 py-4">
-                    
-                    <div class="form-group row mb-4">
-                        <label class="col-sm-2 custom-label col-form-label">Title</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="title" class="form-control" placeholder="Enter project full title..." required>
-                        </div>
-                    </div>
+  <div class="content-wrapper pt-3">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="card card-success card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">Initiate New Project</h3>
+                </div>
 
-                    <div class="form-group row mb-4">
-                        <label class="col-sm-2 custom-label col-form-label">Code</label>
-                        <div class="col-sm-4">
-                            <input type="text" name="code" class="form-control" placeholder="e.g. PRJ-123" maxlength="9">
-                            <p class="helper-text">
-                                <i class="fas fa-info-circle mr-1"></i> 
-                                Only capital letters, numbers and '-' allowed. Max 9 characters.
-                            </p>
-                        </div>
-                    </div>
+                {{-- FORM START --}}
+                <form action="{{ route('save-project') }}" method="POST">
+                    @csrf 
+                    <div class="card-body">
+                        <div class="row">
+                            {{-- Project Title --}}
+                            <div class="col-md-8 form-group">
+                                <label>Project Title <span class="text-danger">*</span></label>
+                                <input type="text" name="prj_title" class="form-control" placeholder="Enter Project Name" required>
+                            </div>
 
-                    <div class="form-group row mb-4">
-                        <label class="col-sm-2 custom-label col-form-label">Sponsor</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="sponsor" class="form-control" placeholder="Name of sponsoring department or entity">
-                        </div>
-                    </div>
-
-                    <div class="form-group row mb-4">
-                        <label class="col-sm-2 custom-label col-form-label">Receipt Date</label>
-                        <div class="col-sm-4">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
-                                </div>
-                                <input type="date" name="receipt_date" class="form-control">
+                            {{-- Proposed Cost --}}
+                            <div class="col-md-4 form-group">
+                                <label>Proposed Cost</label>
+                                <input type="number" name="prj_propcost" class="form-control" placeholder="0.00">
                             </div>
                         </div>
+
+                        {{-- Scope --}}
+                        <div class="form-group">
+                            <label>Scope of Work</label>
+                            <textarea name="prj_scope" class="form-control" rows="3" placeholder="Brief description..."></textarea>
+                        </div>
                     </div>
 
-                </div>
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-arrow-right mr-1"></i> Save & Continue to Details
+                        </button>
+                    </div>
+                </form>
+                {{-- FORM END --}}
 
-                <div class="action-btns">
-                    <button type="button" class="btn btn-default btn-cancel border shadow-sm" onclick="window.history.back();">
-                        <i class="fas fa-times mr-1"></i> Cancel
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-save shadow-sm">
-                        <i class="fas fa-check mr-1"></i> Save Project
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+    </section>
 </div>
 @endsection

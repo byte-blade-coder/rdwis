@@ -8,23 +8,32 @@ use App\Http\Controllers\ProjectController;
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
+|
+| Yahan hum application ke saare routes register kar rahe hain.
+|
 */
 
 // ====================================================
-// 1. GUEST ROUTES
+// 1. GUEST ROUTES (Jo bina login ke dikhenge)
 // ====================================================
 
+// Login Page Show karna
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+
+// Login ka Data submit karna (POST request)
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+// Logout karna
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+
 // ====================================================
-// 2. PROTECTED ROUTES
+// 2. PROTECTED ROUTES (Jo sirf Login hone par dikhenge)
 // ====================================================
 Route::middleware('auth')->group(function () {
 
     // --- Dashboard Redirection ---
-    // Rule 1: Login ke baad ya '/' kholne par Dashboard par jao
+    // Rule 1: Agar koi sirf domain khole, to usy dashboard par bhej do
     Route::get('/', function () {
         return redirect()->route('dashboard');
     });
@@ -36,21 +45,68 @@ Route::middleware('auth')->group(function () {
 
 
     // --- Project Management Module ---
+
+    // 1. View All Projects (List)
     Route::get('/view-projects', [ProjectController::class, 'index'])->name('view-projects');
-    Route::get('/openprojectdetails/{id}', [ProjectController::class, 'show'])->name('projects.show');
+
+    // 2. Create New Project (Form Show)
     Route::get('/addnewproject', [ProjectController::class, 'create'])->name('addnewproject');
+
+    // 3. Save New Project (Data Save)
     Route::post('/save-project', [ProjectController::class, 'store'])->name('save-project');
 
-    // --- Project Sub-Features ---
-    Route::get('/addmilestonepr', function () { return view('projects.addmilestonepr'); })->name('addmilestonepr');
-    Route::get('/projecthistory', function () { return view('projects.projecthistory'); })->name('projecthistory');
-    Route::get('/gantchartpr', function () { return view('projects.gantchartpr'); })->name('gantchartpr');
-    Route::get('/openmprs', function () { return view('projects.openmprs'); })->name('openmprs');
-    Route::get('/viewmpr', function () { return view('projects.viewmpr'); })->name('viewmpr');
+    // 4. Open Project Details (Specific Project ID ke sath)
+    Route::get('/openprojectdetails/{id}', [ProjectController::class, 'show'])->name('projects.show');
 
-    // --- Purchase Cases Module ---
-    Route::get('/createnewcase', function () { return view('purchase.new_case.createnewcase'); })->name('createnewcase');
-    Route::get('/purchasecasedetails', function () { return view('purchase.new_case.purchasecasedetails'); })->name('purchasecasedetails');
-    Route::get('/viewpurchasecase', function () { return view('purchase.new_case.viewpurchasecase'); })->name('viewpurchasecase');
+
+    // --- Milestone Management (New Added) ---
+
+    // 1. Show Milestone Form (Project ID pass kar rahe hain)
+    Route::get('/project/{id}/add-milestone', [ProjectController::class, 'createMilestone'])->name('projects.add-milestone');
+
+    // 2. Save Milestone Data
+    Route::post('/project/{id}/save-milestone', [ProjectController::class, 'storeMilestone'])->name('projects.store-milestone');
+
+
+    // --- Project Sub-Features (Static Views) ---
+    // Note: 'addmilestonepr' wala route hata diya hai kyunki ab hum dynamic route use kar rahe hain upar
+    
+    Route::get('/projecthistory', function () {
+        return view('projects.projecthistory');
+    })->name('projecthistory');
+
+    Route::get('/gantchartpr', function () {
+        return view('projects.gantchartpr');
+    })->name('gantchartpr');
+
+    Route::get('/openmprs', function () {
+        return view('projects.openmprs');
+    })->name('openmprs');
+
+    Route::get('/viewmpr', function () {
+        return view('projects.viewmpr');
+    })->name('viewmpr');
+
+
+    Route::get('/createnewcase', function () {
+        return view('purchase.new_case.createnewcase');
+    })->name('createnewcase');
+
+    Route::get('/purchasecasedetails', function () {
+        return view('purchase.new_case.purchasecasedetails');
+    })->name('purchasecasedetails');
+
+    Route::get('/viewpurchasecase', function () {
+        return view('purchase.new_case.viewpurchasecase');
+    })->name('viewpurchasecase');
+
+    Route::get('/minute-sheet', function () {
+        return view('purchase.new_case.minutesheet');
+    })->name('minutesheet');
+
+    Route::get('/print-minute', function () {
+        return view('purchase.new_case.print_minute');
+    })->name('purchase.new_case.print_minute');
+
 
 });
