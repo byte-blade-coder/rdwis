@@ -59,3 +59,11 @@ Route::get('/purchasecasedetails', function () {
 Route::get('/viewpurchasecase', function () {
     return view('purchase.new_case.viewpurchasecase');
 })->name('viewpurchasecase');
+
+Route::get('/minute-sheet', function () {
+    return view('purchase.new_case.minutesheet');
+})->name('minutesheet');
+
+Route::get('/print-minute', function () {
+    return view('purchase.new_case.print_minute'); 
+})->name('purchase.new_case.print_minute');
