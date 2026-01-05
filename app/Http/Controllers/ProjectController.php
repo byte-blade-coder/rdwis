@@ -1,21 +1,27 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Project; // Project Model ko import karna zaroori hai
+use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-    // 1. Saare Projects ki list dikhane ke liye
     public function index()
     {
-        // DB se saare projects uthayein (Pagination ke sath acha rahega agar data zyada ho)
-        $projects = Project::all(); 
-        
-        // Agar data bohot zyada hai to $projects = Project::paginate(10); use karein
+        // 1. Logged in user ko uthao
+        $user = Auth::user();
 
-        // View ko data pass karein
+        // 2. Check karo user kis Unit ka hai
+        $userUnitId = $user->acc_unt_id;
+
+        // 3. Sirf wahi Projects lao jinka prj_unt_id user ke unit id se match kare
+        // Hum 'unit' relationship bhi load kar rahe hain taake view mein unit ka naam dikha sakein
+        $projects = Project::where('prj_unt_id', $userUnitId)
+                            ->with('unit') // Eager loading for performance
+                            ->get();
+
+        // 4. View ko data pass karo
         return view('projects.viewprojects', compact('projects'));
     }
 

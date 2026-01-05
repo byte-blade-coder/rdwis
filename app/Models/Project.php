@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,16 +10,30 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $table = 'prj.projects';
+    protected $table = 'prj.projects'; // Schema ke sath
     protected $primaryKey = 'prj_id';
     public $timestamps = false; 
 
     protected $fillable = [
-        'prj_title', 'prj_startdt', 'prj_scope', 'prj_sponsor', 'prj_status',
-        'prj_unt_id', 'prj_reporting', 'prj_code', 'prj_propcost', 'prj_aprvcost'
+        'prj_title',
+        'prj_cost',
+        'prj_startdt',
+        'prj_enddt',
+        'prj_unt_id',
+    
+        'prj_title',  'prj_scope', 'prj_sponsor', 'prj_status',
+         'prj_reporting', 'prj_code', 'prj_propcost', 'prj_aprvcost'
     ];
 
     // Relationships
+
+
+    // Relation: Project belongs to a Unit
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'prj_unt_id', 'unt_id');
+    }
+    
     public function milestones()
     {
         return $this->hasMany(Milestone::class, 'msn_xprj_id', 'prj_id');
