@@ -87,12 +87,7 @@
         .emp-detail-row:last-child { border-bottom: none; }
         .emp-label { font-weight: 600; color: #6c757d; }
         
-        /* Readonly Field Styling */
-        input[readonly], textarea[readonly] {
-            background-color: #e9ecef !important;
-            cursor: not-allowed;
-            color: #495057;
-        }
+        
     </style>
 
     {{-- MOCK DATA --}}
@@ -145,14 +140,14 @@
 
             <div class="card-body">
                 
-                {{-- TITLE (READONLY) & BIG HIRED TEAM SECTION --}}
+              
                 <div class="row mb-4 align-items-center">
                     <div class="col-md-6">
                         <label class="text-muted mb-1 small font-weight-bold">PROJECT TITLE</label>
-                        {{-- Readonly added here --}}
+                    
                         <input type="text" class="form-control form-control-lg border-primary shadow-sm" 
                                value="{{ $project->prj_title ?? '' }}" 
-                               readonly
+                            
                                style="font-weight: 700; border-left: 5px solid #007bff;">
                     </div>
 
@@ -185,33 +180,33 @@
                 </div>
 
                 <div class="row">
-                    {{-- Left Column: Project Details (ALL READONLY) --}}
+              
                     <div class="col-lg-5 col-md-5">
                         <div class="section-header"><span><i class="fas fa-info-circle mr-1"></i> Basic Information</span></div>
                         
                         <div class="form-group">
                             <label><small class="font-weight-bold">Scope of Work</small></label>
-                            {{-- Readonly added --}}
-                            <textarea class="form-control" rows="2" style="font-size: 0.9rem;" readonly>{{ $project->prj_scope ?? '' }}</textarea>
+                          
+                            <textarea class="form-control" rows="2" style="font-size: 0.9rem;">{{ $project->prj_scope ?? '' }}</textarea>
                         </div>
 
                         <div class="row">
                             <div class="col-4 form-group">
                                 <label><small class="font-weight-bold">Sponsor</small></label>
-                                {{-- Readonly added --}}
-                                <input type="text" class="form-control form-control-sm" value="{{ $project->prj_sponsor ?? '' }}" readonly>
+                              
+                                <input type="text" class="form-control form-control-sm" value="{{ $project->prj_sponsor ?? '' }}">
                             </div>
                             <div class="col-4 form-group">
                                 <label><small class="font-weight-bold">Receipt Date</small></label>
-                                {{-- Readonly added --}}
-                                <input type="date" class="form-control form-control-sm" value="{{ $project->prj_rcptdt ?? '' }}" readonly>
+                              
+                                <input type="date" class="form-control form-control-sm" value="{{ $project->prj_rcptdt ?? '' }}" >
                             </div>
                             <div class="col-4 form-group">
                                 <label><small class="font-weight-bold">Proposed Cost</small></label>
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend"><span class="input-group-text">Rs.</span></div>
-                                    {{-- Readonly added --}}
-                                    <input type="text" class="form-control font-weight-bold" value="{{ number_format($project->prj_propcost ?? 0) }}" readonly>
+                                   
+                                    <input type="text" class="form-control font-weight-bold" value="{{ number_format($project->prj_propcost ?? 0) }}" >
                                 </div>
                             </div>
                         </div>
@@ -291,15 +286,7 @@
 
             </div>
 
-            <!-- <div class="card-footer bg-white border-top">
-                <div class="d-flex justify-content-end">
-                    <button type="button" class="btn btn-default mr-2 px-4">Close</button>
-                    {{-- Changed Save button text since fields are readonly, though form submission might still be needed for files --}}
-                    <button type="submit" class="btn btn-primary px-5 shadow">
-                        <i class="fas fa-save mr-2"></i> UPDATE DOCUMENTS
-                    </button>
-                </div>
-            </div> -->
+          
         </div>
         </form>
     </div>

@@ -2,90 +2,82 @@
 
 @section('content')
 <div class="content-wrapper">
-    <section class="content">
+  <section class="content">
         <div class="container-fluid">
             
-            <div class="card card-primary">
+            {{-- Header Info --}}
+            <div class="callout callout-info shadow-sm">
+                <h5><i class="fas fa-hard-hat mr-2"></i> Prepare MPR: {{ $project->prj_title }}</h5>
+                <p>
+                    <strong>Project Code:</strong> {{ $project->prj_code ?? 'N/A' }} | 
+                    <strong>Sponsor:</strong> {{ $project->prj_sponsor ?? 'Self' }} |
+                    <strong>Current Physical Status:</strong> 
+                    <span class="badge badge-warning">{{ $lastMpr->pgh_percent ?? 0 }}% Completed</span>
+                </p>
+            </div>
+
+            <div class="card card-primary card-outline shadow">
                 <div class="card-header">
-                    <h3 class="card-title">MPR Overview - Nov 25</h3>
+                    <h3 class="card-title">New Progress Report Form</h3>
                 </div>
 
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-hover text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th style="width: 25%;">Department</th>
-                                    <th style="width: 20%;">Project</th>
-                                    <th style="width: 15%;">Status</th>
-                                    <th style="width: 25%;">Progress Status</th>
-                                    <th style="width: 15%; text-align: center;">Details</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php
-                                    // 4th value add ki hai: 'awaited' ya 'forwarded'
-                                    $projects = [
-                                        ['Communication Division', 'CDS', 'MPR-I', 'awaited'],
-                                        ['Communication Division', 'SSMLP', 'MPR-I', 'forwarded'],
-                                        ['Communication Division', 'NDB', 'MPR-I', 'awaited'],
-                                        ['Communication Division', 'ELINT', 'MPR-I', 'forwarded'],
-                                        ['Communication Division', 'SSSS', 'MPR-I', 'awaited'],
-                                        ['Communication Division', 'TLI', 'MPR-I', 'forwarded'],
-                                        ['Communication Division', '22', 'MPR-II', 'awaited'],
-                                        ['Communication Division', 'ELINT-II', 'MPR-II', 'forwarded'],
-                                        ['Communication Division', 'MWDC', 'MPR-II', 'awaited'],
-                                        ['Communication Division', '123', 'MPR-II', 'forwarded']
-                                    ];
-                                @endphp
+                <form action="{{ route('projects.store-mpr', $project->prj_id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-body">
+                        
+                        {{-- Row 1: Date and Percentage --}}
+                        <div class="row">
+                            <div class="col-md-4 form-group">
+                                <label>Report Month/Date <span class="text-danger">*</span></label>
+                                <input type="date" name="pgh_dt" class="form-control" value="{{ date('Y-m-d') }}" required>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>Physical Progress (%) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="number" name="pgh_percent" class="form-control" min="0" max="100" placeholder="e.g. 45" required>
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">%</span>
+                                    </div>
+                                </div>
+                                <small class="text-muted">Last recorded: {{ $lastMpr->pgh_percent ?? 0 }}%</small>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label>Report Title / Headline <span class="text-danger">*</span></label>
+                                <input type="text" name="pgh_intro" class="form-control" placeholder="e.g. Slab casting completed" required>
+                            </div>
+                        </div>
 
-                                @foreach($projects as $p)
-                                <tr>
-                                    <td>{{ $p[0] }}</td>
-                                    <td><strong>{{ $p[1] }}</strong></td>
-                                    <td>
-                                        <span class="badge badge-primary" style="font-size: 0.9rem;">
-                                            {{ $p[2] }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {{-- Logic to check status --}}
-                                        @if($p[3] == 'forwarded')
-                                            <span class="text-success font-weight-bold">
-                                                <i class="fas fa-check-circle mr-1"></i> Forwarded
-                                            </span>
-                                        @else
-                                            <span class="text-danger font-weight-bold">
-                                                <i class="fas fa-exclamation-circle mr-1"></i> Action Awaited
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{route('viewmpr')}}" class="btn btn-primary btn-sm">
-                                            <i class="fas fa-eye"></i> View MPR
-                                        </a>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        {{-- Row 2: Detailed Progress --}}
+                        <div class="form-group">
+                            <label>Work Done Description <span class="text-danger">*</span></label>
+                            <textarea name="pgh_progress" class="form-control" rows="5" placeholder="Detail the activities performed this month..." required></textarea>
+                        </div>
+
+                        {{-- Row 3: Issues & Financial --}}
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>Issues / Bottlenecks (If any)</label>
+                                <textarea name="pgh_issues" class="form-control" rows="3" placeholder="Delays, fund issues, site problems..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label>Site Photos / Documents</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="mprFiles" multiple>
+                                    <label class="custom-file-label" for="mprFiles">Choose files</label>
+                                </div>
+                                <small class="text-muted d-block mt-2">Upload site images for evidence.</small>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
 
-                <div class="card-footer">
-                    <div class="d-flex justify-content-center align-items-center" style="gap: 10px;">
-                        <select class="form-control" style="width: auto; display: inline-block;">
-                            <option>MPR Part I</option>
-                            <option>MPR Part II</option>
-                        </select>
-                        <button class="btn btn-default">
-                            <i class="fas fa-search mr-1"></i> Preview
-                        </button>
-                        <button class="btn btn-success">
-                            <i class="fas fa-file-word mr-1"></i> Export to Word
+                    <div class="card-footer text-right bg-white border-top">
+                        <a href="{{ route('projects.show', $project->prj_id) }}" class="btn btn-default mr-2">Cancel</a>
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-paper-plane mr-1"></i> Submit Report
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
 
         </div>

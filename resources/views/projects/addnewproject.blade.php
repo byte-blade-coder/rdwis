@@ -56,7 +56,7 @@
     </style>
 
   <div class="content-wrapper pt-3">
-    <section class="content">
+   <section class="content">
         <div class="container-fluid">
             <div class="card card-success card-outline">
                 <div class="card-header">
@@ -67,21 +67,30 @@
                 <form action="{{ route('save-project') }}" method="POST">
                     @csrf 
                     <div class="card-body">
+                        
+                        {{-- Row 1: Title and Sponsor --}}
                         <div class="row">
-                            {{-- Project Title --}}
-                            <div class="col-md-8 form-group">
+                            <div class="col-md-6 form-group">
                                 <label>Project Title <span class="text-danger">*</span></label>
                                 <input type="text" name="prj_title" class="form-control" placeholder="Enter Project Name" required>
                             </div>
 
-                            {{-- Proposed Cost --}}
+                            {{-- NEW FIELD: SPONSOR --}}
+                            <div class="col-md-6 form-group">
+                                <label>Sponsor / Funding Agency</label>
+                                <input type="text" name="prj_sponsor" class="form-control" placeholder="e.g. World Bank, Govt of Punjab">
+                            </div>
+                        </div>
+
+                        {{-- Row 2: Cost --}}
+                        <div class="row">
                             <div class="col-md-4 form-group">
-                                <label>Proposed Cost</label>
+                                <label>Proposed Cost (Rs.)</label>
                                 <input type="number" name="prj_propcost" class="form-control" placeholder="0.00">
                             </div>
                         </div>
 
-                        {{-- Scope --}}
+                        {{-- Row 3: Scope --}}
                         <div class="form-group">
                             <label>Scope of Work</label>
                             <textarea name="prj_scope" class="form-control" rows="3" placeholder="Brief description..."></textarea>

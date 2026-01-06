@@ -70,6 +70,20 @@ Route::middleware('auth')->group(function () {
 
     // --- Project Sub-Features (Static Views) ---
     // Note: 'addmilestonepr' wala route hata diya hai kyunki ab hum dynamic route use kar rahe hain upar
+
+
+    // --- MPR (Monthly Progress Report) Modules ---
+
+// 1. Prepare MPR Form (Is project ke liye MPR banao)
+Route::get('/project/{id}/prepare-mpr', [ProjectController::class, 'prepareMpr'])->name('projects.prepare-mpr');
+
+// 2. Save MPR Data
+Route::post('/project/{id}/save-mpr', [ProjectController::class, 'storeMpr'])->name('projects.store-mpr');
+
+// 3. View Specific MPR (History ID ke base par)
+Route::get('/view-mpr/{mpr_id}', [ProjectController::class, 'viewMpr'])->name('projects.view-mpr');
+
+
     
     Route::get('/projecthistory', function () {
         return view('projects.projecthistory');
@@ -79,13 +93,13 @@ Route::middleware('auth')->group(function () {
         return view('projects.gantchartpr');
     })->name('gantchartpr');
 
-    Route::get('/openmprs', function () {
-        return view('projects.openmprs');
-    })->name('openmprs');
+    // Route::get('/openmprs', function () {
+    //     return view('projects.openmprs');
+    // })->name('openmprs');
 
-    Route::get('/viewmpr', function () {
-        return view('projects.viewmpr');
-    })->name('viewmpr');
+    // Route::get('/viewmpr', function () {
+    //     return view('projects.viewmpr');
+    // })->name('viewmpr');
 
 
     Route::get('/createnewcase', function () {
