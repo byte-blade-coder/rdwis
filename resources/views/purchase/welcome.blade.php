@@ -138,12 +138,27 @@
             </a>
         </li>
 
-         <li class="nav-item">
+        <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-project-diagram"></i>
+              <p>PROJECTS <i class="right fas fa-angle-left"></i></p>
+            </a>
+
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
                 <a href="{{ route('view-projects') }}" class="nav-link">
                   <i class="fas fa-folder-open nav-icon"></i>
                   <p>PROJECTS</p>
-                </a>       
-             
+                </a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="{{route('openmprs')}}" class="nav-link">
+                  <i class="fas fa-file-alt nav-icon"></i>
+                  <p>PREPARE MPR</p>
+                </a>
+              </li>
+            </ul>
         </li>
 
         <li class="nav-item">

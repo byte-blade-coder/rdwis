@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,6 +13,8 @@ class User extends Authenticatable
 
     // Table ka naam schema ke sath
     protected $table = 'cen.accounts';
+    
+
 
     // Primary Key (Default 'id' hoti hai, yahan 'acc_id' hai)
     protected $primaryKey = 'acc_id';
@@ -38,6 +41,12 @@ class User extends Authenticatable
         return $this->acc_pass;
     }
 
+    // Relationship: User ka Role (Designation)
+    public function role()
+    {
+        // 'acc_desig' user table mein FK hai, 'rol_desig' role table mein PK hai
+        return $this->belongsTo(Role::class, 'acc_desig', 'rol_desig');
+    }
     // Relationship: User ka Unit (Department)
     // Ye batayega ke user kis office ka banda hai
     public function unit()

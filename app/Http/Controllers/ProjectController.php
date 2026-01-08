@@ -4,66 +4,60 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Project;
-use App\Models\Milestone; 
+use App\Models\Milestone;
+use App\Models\PrgHistory; 
 use Illuminate\Support\Facades\Auth;
-use App\Models\PrgHistory;
+use Illuminate\Validation\Rule; 
 
 class ProjectController extends Controller
 {
-    // 1. Show All Projects 
+    // --- Projects ---
     public function index()
     {
         $user = Auth::user();
-        
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        
+        if (!$user) return redirect()->route('login');
         $projects = Project::where('prj_unt_id', $user->acc_unt_id)->get();
-
         return view('projects.viewprojects', compact('projects'));
     }
 
-    // 2. Show Single Project Details
     public function show($id)
     {
-       
         $project = Project::with('milestones')->where('prj_id', $id)->firstOrFail();
-        
         return view('projects.openprojectdetails', compact('project'));
     }
 
-   
-    // 3. Show Form to Create New Project
     public function create()
     {
         return view('projects.addnewproject');
     }
 
-   // 4. Save New Project to Database
-    public function store(Request $request)
+  public function store(Request $request)
     {
-        // Validation
+        // FIX: Connection name dynamic utha rahe hain taaki 'prj' ko connection na samjhay
+        $connection = config('database.default'); // e.g. 'pgsql'
+        
         $request->validate([
+            'prj_code' => [
+                'required', 
+                'string', 
+                'max:20', 
+                // Ab ye ban jayega: unique:pgsql.prj.projects,prj_code
+                Rule::unique("$connection.prj.projects", 'prj_code') 
+            ],
             'prj_title' => 'required|string|max:255',
-            'prj_sponsor' => 'nullable|string|max:255', // Validation add ki
+            'prj_sponsor' => 'nullable|string|max:255',
             'prj_propcost' => 'nullable|numeric',
         ]);
 
-        // 1. Auto-generate Next Project ID
+        // Auto-generate ID
         $maxId = Project::max('prj_id');
         $nextId = $maxId ? $maxId + 1 : 1;
 
-        // 2. Create Project Instance
         $project = new Project();
         $project->prj_id = $nextId;
-        
-        // Auto-generate Code (8 chars fix)
-        $project->prj_code = 'P-' . $nextId; 
-
+        $project->prj_code = $request->prj_code;
         $project->prj_title = $request->prj_title;
-        $project->prj_sponsor = $request->prj_sponsor; // <--- YE LINE ADD KI HAI
+        $project->prj_sponsor = $request->prj_sponsor;
         $project->prj_scope = $request->prj_scope;
         $project->prj_propcost = $request->prj_propcost;
         $project->prj_status = 'Open';
@@ -72,29 +66,26 @@ class ProjectController extends Controller
         
         $project->save();
 
-        // Redirect to Details Page
         return redirect()->route('projects.show', $project->prj_id)
                          ->with('success', 'Project created successfully!');
     }
-
-    // 5. Show Add Milestone Form
+    
+    // --- Milestones ---
     public function createMilestone($id)
     {
         $project = Project::where('prj_id', $id)->firstOrFail();
         return view('projects.addmilestonepr', compact('project'));
     }
 
-    // 6. Save Milestone Data
     public function storeMilestone(Request $request, $id)
     {
         $request->validate([
-            'msn_desc' => 'required|string|max:255',
+            'msn_desc' => 'required',
             'msn_targetdt' => 'required|date',
-            'msn_type' => 'required|string',
-            'msn_status' => 'required|string'
+            'msn_type' => 'required',
+            'msn_status' => 'required'
         ]);
 
-        // Auto ID logic for Milestone
         $maxId = Milestone::max('msn_id');
         $nextId = $maxId ? $maxId + 1 : 1;
 
@@ -107,61 +98,114 @@ class ProjectController extends Controller
         $milestone->msn_status = $request->msn_status;
         $milestone->save();
 
-        return redirect()->route('projects.show', $id)
-                         ->with('success', 'Milestone added successfully!');
+        return redirect()->route('projects.show', $id)->with('success', 'Milestone Added!');
     }
 
-    // 1. Show Prepare MPR Form
-    public function prepareMpr($id)
+    // --- MPR (Reports) ---
+    
+    // Step 1: List Projects for MPR
+    public function mprProjectList()
+    {
+        $user = Auth::user();
+        $projects = Project::where('prj_unt_id', $user->acc_unt_id)->get();
+        return view('projects.openmprs', compact('projects'));
+    }
+
+public function mprProjectView($id)
     {
         $project = Project::where('prj_id', $id)->firstOrFail();
         
-        // Pichla MPR check karein taaki user ko purana status dikha sakein
-        $lastMpr = PrgHistory::where('pgh_xprj_id', $id)
-                             ->orderBy('pgh_dt', 'desc')
-                             ->first();
+        // 1. Get ALL History ordered by date desc (Recent first)
+        $mprHistory = PrgHistory::where('pgh_xprj_id', $id)
+                                ->orderBy('pgh_dtg', 'desc')
+                                ->get();
 
-        return view('projects.openmprs', compact('project', 'lastMpr'));
+        // 2. Get Current Active Milestone (Pending or In Progress, sorted by date)
+        $currentMilestone = Milestone::where('msn_xprj_id', $id)
+                                     ->whereIn('msn_status', ['Pending', 'In Progress'])
+                                     ->orderBy('msn_targetdt', 'asc')
+                                     ->first();
+
+        return view('projects.viewmpr', compact('project', 'mprHistory', 'currentMilestone'));
     }
 
-    // 2. Save MPR
-    public function storeMpr(Request $request, $id)
+   public function storeMpr(Request $request, $id)
     {
         $request->validate([
-            'pgh_dt' => 'required|date',
-            'pgh_percent' => 'required|integer|min:0|max:100',
-            'pgh_intro' => 'required|string|max:255',
+            'pgh_dtg' => 'required|date',
             'pgh_progress' => 'required|string',
         ]);
 
-        // Auto ID Generation
-        $maxId = PrgHistory::max('pgh_id');
-        $nextId = $maxId ? $maxId + 1 : 1;
-
         $mpr = new PrgHistory();
-        $mpr->pgh_id = $nextId;
         $mpr->pgh_xprj_id = $id;
-        $mpr->pgh_dt = $request->pgh_dt; // Report Date
-        $mpr->pgh_intro = $request->pgh_intro; // Title
-        $mpr->pgh_progress = $request->pgh_progress; // Details
-        $mpr->pgh_issues = $request->pgh_issues; // Issues
-        $mpr->pgh_percent = $request->pgh_percent; // %
+        $mpr->pgh_dtg = $request->pgh_dtg;
+        $mpr->pgh_progress = $request->pgh_progress;
+        
+        // LOGIC CHANGE: Ab hum Author mein Designation Short Code save karenge
+        if (Auth::check()) {
+            // Agar Role exist karta hai to Short Desig uthao, warna Username
+            $author = Auth::user()->role->rol_desigshort ?? Auth::user()->acc_username;
+            $mpr->pgh_author = $author;
+            $mpr->pgh_level = Auth::user()->acc_level;
+        } else {
+            $mpr->pgh_author = 'System';
+            $mpr->pgh_level = 1;
+        }
+
         $mpr->pgh_status = 'Submitted';
+        $mpr->pgh_underedit = true; 
         
         $mpr->save();
 
-        // Optional: Project ka main status update karna ho to
-        // $project = Project::find($id);
-        // $project->prj_status = 'Work in Progress';
-        // $project->save();
-
-        return redirect()->route('projects.show', $id)->with('success', 'Monthly Progress Report Saved!');
+        return redirect()->route('mpr.view', $id)->with('success', 'Progress Report Added Successfully!');
     }
 
-    // 3. View Single MPR Details
-    public function viewMpr($mpr_id)
+
+
+    public function editMilestone($id)
     {
-        $mpr = PrgHistory::with('project')->where('pgh_id', $mpr_id)->firstOrFail();
-        return view('projects.viewmpr', compact('mpr'));
+        $milestone = Milestone::where('msn_id', $id)->firstOrFail();
+        // Project details bhi chahiye hongi wapis jane ke liye
+        $project = Project::where('prj_id', $milestone->msn_xprj_id)->first();
+        
+        return view('projects.editmilestone', compact('milestone', 'project'));
     }
+
+    // 2. Updated Data Save Karna
+    public function updateMilestone(Request $request, $id)
+    {
+        $request->validate([
+            'msn_desc' => 'required',
+            'msn_targetdt' => 'required|date',
+            'msn_type' => 'required',
+            'msn_status' => 'required'
+        ]);
+
+        $milestone = Milestone::where('msn_id', $id)->firstOrFail();
+        
+        $milestone->msn_desc = $request->msn_desc;
+        $milestone->msn_targetdt = $request->msn_targetdt;
+        $milestone->msn_type = $request->msn_type;
+        $milestone->msn_status = $request->msn_status;
+        
+        $milestone->save(); // Laravel automatically update query chalayega
+
+        return redirect()->route('projects.show', $milestone->msn_xprj_id)
+                         ->with('success', 'Milestone Updated Successfully!');
+    }
+
+    // 3. Delete Karna
+    public function deleteMilestone($id)
+    {
+        $milestone = Milestone::where('msn_id', $id)->firstOrFail();
+        $projectId = $milestone->msn_xprj_id; // Project ID save kar lo wapis jane ke liye
+        
+        $milestone->delete();
+
+        return redirect()->route('projects.show', $projectId)
+                         ->with('success', 'Milestone Deleted Successfully!');
+    }
+
+
+    
 }
