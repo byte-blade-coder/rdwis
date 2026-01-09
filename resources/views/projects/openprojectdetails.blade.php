@@ -27,7 +27,7 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.02);
             display: flex; /* Flex container for Row */
-            overflow: hidden;
+            
         }
         .info-left-content { flex: 1; padding: 15px; display: flex; align-items: center; } /* 70% Width */
         .info-right-team { width: 350px; background: #fff; border-left: 1px solid #e9ecef; padding: 10px 15px; display: flex; flex-direction: column; justify-content: center; } /* 30% Width */
@@ -109,13 +109,22 @@
             else { $daysDiff = $diff; $statusMsg = $daysDiff . " Days Left"; $badgeClass = "badge-success"; }
         }
         $team = [
-            ['id'=>1, 'name'=>'Ali Khan', 'role'=>'Project Manager', 'img'=>'https://ui-avatars.com/api/?name=Ali+Khan&background=007bff&color=fff', 'email'=>'ali@rdwis.com', 'phone'=>'0300-1234567'],
-            ['id'=>2, 'name'=>'Sara Ahmed', 'role'=>'Senior Architect', 'img'=>'https://ui-avatars.com/api/?name=Sara+Ahmed&background=e83e8c&color=fff', 'email'=>'sara@rdwis.com', 'phone'=>'0300-7654321'],
-            ['id'=>3, 'name'=>'Bilal Hameed', 'role'=>'Site Engineer', 'img'=>'https://ui-avatars.com/api/?name=Bilal+Hameed&background=28a745&color=fff', 'email'=>'bilal@rdwis.com', 'phone'=>'0333-1122334'],
-            ['id'=>4, 'name'=>'Usman Qureshi', 'role'=>'Surveyor', 'img'=>'https://ui-avatars.com/api/?name=Usman+Q&background=ffc107&color=fff', 'email'=>'usman@rdwis.com', 'phone'=>'0321-9988776'],
-        ];
+    ['id'=>1, 'name'=>'Ali Khan', 'role'=>'Project Manager', 'email'=>'ali@rdwis.com', 'phone'=>'0300-1234567'],
+    ['id'=>2, 'name'=>'Sara Ahmed', 'role'=>'Senior Architect', 'email'=>'sara@rdwis.com', 'phone'=>'0300-7654321'],
+    ['id'=>3, 'name'=>'Bilal Hameed', 'role'=>'Site Engineer', 'email'=>'bilal@rdwis.com', 'phone'=>'0333-1122334'],
+    ['id'=>4, 'name'=>'Usman Qureshi', 'role'=>'Surveyor', 'email'=>'usman@rdwis.com', 'phone'=>'0321-9988776'],
+];
         $displayLimit = 6; $remaining = count($team) - $displayLimit;
+
+      foreach ($team as &$member) {
+    $member['img'] = asset('dist/img/profile-1.jfif');
+}
+
+
     @endphp
+
+
+    
 
     <div class="container-fluid">
         <form action="#" method="POST" enctype="multipart/form-data"> @csrf
@@ -160,9 +169,9 @@
                     {{-- RIGHT: Buttons (Spendings LEFT of History) --}}
                     <div class="col-md-4 text-right">
                         <div class="header-controls justify-content-end">
-                            <button type="button" class="btn btn-warning btn-sm shadow-sm font-weight-bold text-white" onclick="alert('Module under development')">
-                                <i class="fas fa-coins mr-1"></i> Spendings
-                            </button>
+                            <a href="{{ route('projects.spendings', $project->prj_id) }}" class="btn btn-warning btn-sm shadow-sm font-weight-bold text-white">
+    <i class="fas fa-coins mr-1"></i> Spendings
+</a>
                             <a href="{{ route('projecthistory') }}" class="btn btn-outline-secondary btn-sm shadow-sm font-weight-bold">
                                 <i class="fas fa-history mr-1"></i> History
                             </a>
@@ -206,6 +215,37 @@
                         </div>
                     </div>
 
+                    <style>
+   .info-panel {
+    overflow: visible;   /* 🔥 MOST IMPORTANT */
+}
+
+.team-section-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.team-avatar-wrapper {
+    width: 42px;
+    height: 42px;
+    margin-left: -10px;
+    position: relative;
+    z-index: 10;
+    cursor: pointer;
+}
+
+.team-avatar-wrapper img {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    background: #fff;
+}
+
+
+                        </style>
                     {{-- RIGHT: Team Block (Border Touch) --}}
                     <div class="info-right-team">
                         <div class="d-flex justify-content-end mb-2">

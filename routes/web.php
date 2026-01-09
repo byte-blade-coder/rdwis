@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,7 +40,8 @@ Route::middleware('auth')->group(function () {
  // --- Milestone Management ---
     Route::get('/project/{id}/add-milestone', [ProjectController::class, 'createMilestone'])->name('projects.add-milestone');
     Route::post('/project/{id}/save-milestone', [ProjectController::class, 'storeMilestone'])->name('projects.store-milestone');
-    
+    Route::get('/project/{id}/spendings', [ProjectController::class, 'projectSpendings'])->name('projects.spendings');
+
     // NEW: Edit & Delete Routes
     Route::get('/milestone/{id}/edit', [ProjectController::class, 'editMilestone'])->name('milestone.edit'); // Edit Page
     Route::post('/milestone/{id}/update', [ProjectController::class, 'updateMilestone'])->name('milestone.update'); // Update Action
