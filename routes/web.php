@@ -34,8 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/view-projects', [ProjectController::class, 'index'])->name('view-projects');
     Route::get('/addnewproject', [ProjectController::class, 'create'])->name('addnewproject');
     Route::post('/save-project', [ProjectController::class, 'store'])->name('save-project');
+    Route::post('/finalize-project/{id}', [ProjectController::class, 'finalizeProject'])->name('finalize-project');
     Route::get('/openprojectdetails/{id}', [ProjectController::class, 'show'])->name('projects.show');
-
+// View Attachment Route
+Route::get('/attachment/view/{id}', [ProjectController::class, 'viewAttachment'])->name('attachment.view');
 
  // --- Milestone Management ---
     Route::get('/project/{id}/add-milestone', [ProjectController::class, 'createMilestone'])->name('projects.add-milestone');

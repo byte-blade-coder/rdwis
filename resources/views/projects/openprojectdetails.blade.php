@@ -282,25 +282,47 @@
                             <span class="badge badge-light border">Required: 8</span>
                         </div>
                         
-                        <div class="doc-scroll-container">
-                            @php $docs = ['PPF', 'Project Approval', 'Project Proposal', 'Work Order', 'Tech Specs', 'Drawing/Plan', 'Site Images', 'BOQ']; @endphp
-                            @foreach($docs as $index => $doc)
-                            <div class="doc-card shadow-sm">
-                                {{-- Left: Icon & Name --}}
-                                <div class="doc-content">
-                                    <div class="doc-icon"><i class="fas fa-file-alt"></i></div>
-                                    <div class="doc-title" title="{{ $doc }}">{{ $doc }}</div>
-                                </div>
-                                {{-- Right: Button --}}
-                                <div style="width: 28px; height: 28px; flex-shrink: 0;">
-                                    <label for="file-{{$index}}" class="btn btn-sm btn-outline-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 100%; height: 100%; cursor: pointer;" id="btn-{{$index}}">
-                                        <i class="fas fa-upload" style="font-size: 0.75rem;"></i>
-                                    </label>
-                                    <input type="file" id="file-{{$index}}" name="docs[{{ $doc }}]" class="file-input-hidden" onchange="updateUploadUI(this, 'btn-{{$index}}')">
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
+                       <div class="doc-scroll-container">
+    @php $docs = ['PPF', 'Project Approval', 'Project Proposal', 'Work Order', 'Tech Specs', 'Drawing/Plan', 'Site Images', 'BOQ']; @endphp
+    
+    @foreach($docs as $index => $doc)
+        {{-- Check if file exists for this specific document type --}}
+        @php
+            $existingFile = $project->attachments->where('jat_type', $doc)->first();
+        @endphp
+
+    <div class="doc-card shadow-sm" style="{{ $existingFile ? 'border-left-color: #28a745; background-color: #f8fff9;' : '' }}">
+        
+        {{-- Left: Icon & Name --}}
+        <div class="doc-content">
+            <div class="doc-icon" style="{{ $existingFile ? 'color: #28a745; background-color: #e0fdf4;' : '' }}">
+                <i class="fas {{ $existingFile ? 'fa-check-circle' : 'fa-file-alt' }}"></i>
+            </div>
+            <div class="doc-title" title="{{ $doc }}">{{ $doc }}</div>
+        </div>
+        
+        {{-- Right: Buttons --}}
+        <div class="d-flex align-items-center">
+            
+            {{-- AGAR FILE EXIST KARTI HAI TO VIEW BUTTON --}}
+            @if($existingFile)
+                <a href="{{ route('attachment.view', $existingFile->jat_id) }}" target="_blank" class="btn btn-sm btn-outline-info rounded-circle mr-1" title="View File" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-eye" style="font-size: 0.75rem;"></i>
+                </a>
+            @endif
+
+            {{-- UPLOAD BUTTON --}}
+            <div style="width: 28px; height: 28px; position: relative;">
+                <label for="file-{{$index}}" class="btn btn-sm {{ $existingFile ? 'btn-success' : 'btn-outline-secondary' }} rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 100%; height: 100%; cursor: pointer;" id="btn-{{$index}}">
+                    <i class="fas {{ $existingFile ? 'fa-pen' : 'fa-upload' }}" style="font-size: 0.7rem;"></i>
+                </label>
+                <input type="file" id="file-{{$index}}" name="docs[{{ $doc }}]" class="file-input-hidden" onchange="updateUploadUI(this, 'btn-{{$index}}')">
+            </div>
+
+        </div>
+    </div>
+    @endforeach
+</div>
                     </div>
 
                     {{-- RIGHT COLUMN: Milestones & Timeline (Wide View) --}}

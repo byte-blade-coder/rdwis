@@ -43,4 +43,11 @@ class Project extends Model
     {
         return $this->hasMany(PrgHistory::class, 'pgh_xprj_id', 'prj_id');
     }
+
+    // Relationship: Project has many Attachments
+    public function attachments()
+    {
+        return $this->hasMany(PrjAttachment::class, 'jat_objid', 'prj_id')
+                    ->where('jat_objtype', 'Project');
+    }
 }
