@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/finalize-project/{id}', [ProjectController::class, 'finalizeProject'])->name('finalize-project');
     Route::get('/openprojectdetails/{id}', [ProjectController::class, 'show'])->name('projects.show');
     Route::post('/project/{id}/upload-other', [ProjectController::class, 'storeOtherAttachment'])->name('projects.upload-other');
+      Route::get('/projecthistory', [ProjectController::class, 'projectHistory'])->name('projecthistory');
     // Single Upload from Detail Page
 Route::post('/project/{id}/upload-single', [ProjectController::class, 'uploadSingleAttachment'])->name('projects.upload.single');
 
@@ -65,7 +66,7 @@ Route::get('/attachment/view/{id}', [ProjectController::class, 'viewAttachment']
 
 
     // --- Other Static Pages ---
-    Route::get('/projecthistory', function () { return view('projects.projecthistory'); })->name('projecthistory');
+  
     Route::get('/gantchartpr', function () { return view('projects.gantchartpr'); })->name('gantchartpr');
     
     // --- Purchase Cases ---
