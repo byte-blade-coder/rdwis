@@ -1,104 +1,120 @@
 @extends('welcome')
 
 @section('content')
-<div class="content-wrapper pt-3">
+<div class="content-wrapper">
 
     {{-- HEADER --}}
     <div class="content-header">
-        <div class="container-fluid">
+    <div class="container-fluid">
 
-            {{-- PAGE TITLE --}}
-            <div class="row mb-3">
-                <div class="col-12 d-flex justify-content-between align-items-center">
-                    <h1 id="page-heading" class="m-0 font-weight-bold text-primary">
-                        <i class="fas fa-folder-open mr-1"></i> All Projects
-                    </h1>
+        {{-- PAGE TITLE --}}
+        <div class="row mb-3">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <h1 id="page-heading" class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-folder-open mr-1"></i> All Projects
+                </h1>
 
-                    <a href="{{ route('addnewproject') }}"
-                       class="btn btn-primary shadow-sm px-4"
-                       style="border-radius: 20px;">
-                        <i class="fas fa-plus-circle mr-1"></i> New Project
-                    </a>
-                </div>
+                <a href="{{ route('addnewproject') }}"
+                   class="btn btn-primary shadow-sm px-4"
+                   style="border-radius: 20px;">
+                    <i class="fas fa-plus-circle mr-1"></i> New Project
+                </a>
             </div>
-
-            {{-- FILTER CARD --}}
-            <div class="card card-outline card-primary shadow-sm">
-                <div class="card-body py-3">
-
-                    <div class="row align-items-end">
-
-                        {{-- PROJECT CODE SEARCH --}}
-                        <div class="col-md-3 mb-2">
-                            <label class="small text-muted">Project Code</label>
-                            <div class="dropdown" id="searchDropdown">
-                                <button class="btn btn-light border form-control text-left d-flex justify-content-between align-items-center"
-                                        type="button" data-toggle="dropdown">
-                                    <span id="selectedCount" class="text-muted">Select Codes</span>
-                                    <i class="fas fa-chevron-down small text-primary"></i>
-                                </button>
-
-                                <div class="dropdown-menu w-100 p-2 shadow-sm"
-                                     style="max-height: 280px; overflow-y: auto;">
-                                    <input type="text"
-                                           class="form-control form-control-sm mb-2"
-                                           placeholder="Search code..."
-                                           onkeyup="filterCodeList(this)">
-
-                                    <div id="codeListContainer"></div>
-
-                                    <div class="dropdown-divider"></div>
-                                    <button class="btn btn-xs btn-link text-danger p-0"
-                                            onclick="clearCodeFilter()">
-                                        Clear Selection
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {{-- FROM DATE --}}
-                        <div class="col-md-2 mb-2">
-                            <label class="small text-muted">From Date</label>
-                            <input type="date" id="dateFrom" class="form-control form-control-sm" onchange="applyFilters()">
-                        </div>
-
-                        {{-- TO DATE --}}
-                        <div class="col-md-2 mb-2">
-                            <label class="small text-muted">To Date</label>
-                            <input type="date" id="dateTo" class="form-control form-control-sm" onchange="applyFilters()">
-                        </div>
-
-                        {{-- PROJECT STAGE --}}
-                        <div class="col-md-2 mb-2">
-                            <label class="small text-muted">Project Stage</label>
-                            <select id="stageFilter" class="form-control form-control-sm" onchange="applyFilters()">
-                                <option value="all">All Stages</option>
-                                <option value="Draft">Drafting</option>
-                                <option value="Approved">Approved</option>
-                                <option value="Started">Started</option>
-                                <option value="Work In Progress">Work In Progress</option>
-                                <option value="EDC">EDC</option>
-                            </select>
-                        </div>
-
-                        {{-- MAIN STATUS (UPDATED WITH DRAFT) --}}
-                        <div class="col-md-3 mb-2">
-                            <label class="small text-muted">Main Status</label>
-                            <div class="btn-group btn-block shadow-sm">
-                                <button class="btn btn-sm btn-outline-primary active filter-btn-main" onclick="setMainFilter('all', this)">All</button>
-                                <button class="btn btn-sm btn-outline-primary filter-btn-main" onclick="setMainFilter('open', this)">Open</button>
-                                {{-- NEW DRAFT BUTTON ADDED HERE --}}
-                                <button class="btn btn-sm btn-outline-warning filter-btn-main" onclick="setMainFilter('draft', this)">Drafts</button>
-                                <button class="btn btn-sm btn-outline-success filter-btn-main" onclick="setMainFilter('closed', this)">Closed</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        {{-- FILTER CARD --}}
+        <div class="card card-outline card-primary shadow-sm">
+            <div class="card-body py-3">
+
+                <div class="row align-items-end">
+
+                    {{-- PROJECT CODE SEARCH --}}
+                    <div class="col-md-3 mb-2">
+                        <label class="small text-muted">Project Code</label>
+                        <div class="dropdown" id="searchDropdown">
+                            <button class="btn btn-light border form-control text-left d-flex justify-content-between align-items-center"
+                                    type="button" data-toggle="dropdown">
+                                <span id="selectedCount" class="text-muted">Select Codes</span>
+                                <i class="fas fa-chevron-down small text-primary"></i>
+                            </button>
+
+                            <div class="dropdown-menu w-100 p-2 shadow-sm"
+                                 style="max-height: 280px; overflow-y: auto;">
+                                <input type="text"
+                                       class="form-control form-control-sm mb-2"
+                                       placeholder="Search code..."
+                                       onkeyup="filterCodeList(this)">
+
+                                <div id="codeListContainer"></div>
+
+                                <div class="dropdown-divider"></div>
+                                <button class="btn btn-xs btn-link text-danger p-0"
+                                        onclick="clearCodeFilter()">
+                                    Clear Selection
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- FROM DATE --}}
+                    <div class="col-md-2 mb-2">
+                        <label class="small text-muted">From Date</label>
+                        <input type="date"
+                               id="dateFrom"
+                               class="form-control form-control-sm"
+                               onchange="applyFilters()">
+                    </div>
+
+                    {{-- TO DATE --}}
+                    <div class="col-md-2 mb-2">
+                        <label class="small text-muted">To Date</label>
+                        <input type="date"
+                               id="dateTo"
+                               class="form-control form-control-sm"
+                               onchange="applyFilters()">
+                    </div>
+
+                    {{-- PROJECT STAGE --}}
+                    <div class="col-md-2 mb-2">
+                        <label class="small text-muted">Project Stage</label>
+                        <select id="stageFilter"
+                                class="form-control form-control-sm"
+                                onchange="applyFilters()">
+                            <option value="all">All Stages</option>
+                            <option value="Approved">Approved</option>
+                            <option value="Started">Started</option>
+                            <option value="Work In Progress">Work In Progress</option>
+                            <option value="Warranty">Warranty</option>
+                            <option value="EDC">EDC</option>
+                        </select>
+                    </div>
+
+                    {{-- MAIN STATUS --}}
+                    <div class="col-md-3 mb-2">
+                        <label class="small text-muted">Main Status</label>
+                        <div class="btn-group btn-block">
+                            <button class="btn btn-sm btn-outline-primary active filter-btn-main"
+                                    onclick="setMainFilter('all', this)">
+                                All
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary filter-btn-main"
+                                    onclick="setMainFilter('open', this)">
+                                Open
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary filter-btn-main"
+                                    onclick="setMainFilter('closed', this)">
+                                Closed
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
+
 
     {{-- CONTENT --}}
     <div class="content">
@@ -107,23 +123,31 @@
             <div class="row" id="projectsContainer">
                 @forelse($projects as $project)
                 
+                {{-- 
+                    NOTE: Adding Data Attributes for JS Filtering 
+                    data-code: For search
+                    data-status: For Open/Closed buttons
+                    data-date: For Date Range (Using Start Date here, logic can be adjusted)
+                    data-stage: Logic to determine stage based on your timeline logic needs to be dynamic.
+                    Currently assuming a hardcoded logic or passing a variable.
+                --}}
+                
                 @php
                     $status = Str::lower($project->prj_status);
-                    
-                    // Stage Logic
+                    // Determine Stage for filtering (This logic attempts to guess the stage based on status)
                     $currentStage = 'Approved'; 
-                    if($status == 'draft') $currentStage = 'Draft';
-                    elseif($project->prj_startdt) $currentStage = 'Started';
-                    elseif($status == 'open') $currentStage = 'Work In Progress';
-                    elseif($status == 'closed') $currentStage = 'EDC'; 
+                    if($project->prj_startdt) $currentStage = 'Started';
+                    if($status == 'open') $currentStage = 'Work In Progress';
+                    if($status == 'closed') $currentStage = 'EDC'; 
+                    // You can refine $currentStage logic based on your DB columns
                 @endphp
 
                 <div class="col-12 project-card-wrapper">
                     <div class="card project-card shadow-sm mb-4"
                          data-code="{{ $project->prj_code }}"
                          data-status="{{ $status }}"
-                         data-stage="{{ strtolower($currentStage) }}"
-                         data-date="{{ \Carbon\Carbon::parse($project->prj_rcptdt)->format('Y-m-d') }}">
+                         data-stage="{{ $currentStage }}"
+                         data-date="{{ \Carbon\Carbon::parse($project->prj_startdt)->format('Y-m-d') }}">
 
                         <div class="card-body">
 
@@ -137,7 +161,7 @@
                                         $badge = match($status){
                                             'open'   => 'badge-primary',
                                             'closed' => 'badge-success',
-                                            'draft'  => 'badge-warning',
+                                            'hold'   => 'badge-warning',
                                             default  => 'badge-secondary'
                                         };
                                     @endphp
@@ -147,45 +171,40 @@
                                     </span>
                                 </div>
 
-                                {{-- ACTION BUTTON LOGIC --}}
-                                @if($status == 'draft')
-                                    {{-- Agar Draft hai to wapis Form par bhejo --}}
-                                    <a href="{{ route('addnewproject', ['draft_id' => $project->prj_id]) }}"
-                                       class="btn btn-warning btn-sm px-4 font-weight-bold shadow-sm" style="border-radius: 20px;">
-                                        <i class="fas fa-pen mr-1"></i> Continue Editing
-                                    </a>
-                                @else
-                                    {{-- Agar Open/Closed hai to Detail page par bhejo --}}
-                                    <a href="{{ route('projects.show', $project->prj_id) }}"
-                                       class="btn btn-outline-primary btn-sm px-4 shadow-sm" style="border-radius: 20px;">
-                                        View Project <i class="fas fa-arrow-right ml-1"></i>
-                                    </a>
-                                @endif
+                                <a href="{{ route('projects.show',$project->prj_id) }}"
+                                   class="btn btn-outline-primary btn-sm px-4" style="border-radius: 20px;">
+                                    View Project <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
                             </div>
 
                             {{-- TIMELINE --}}
                             <div class="timeline-wrapper mt-4">
                                 <div class="timeline-item">
-                                    <div class="progress-segment {{ ($status!='draft') ? 'bg-primary' : 'bg-secondary' }}"></div>
+                                    <div class="progress-segment bg-primary"></div>
                                     <div class="meta-text">Approval</div>
-                                    <div class="meta-date">{{ $project->prj_aprvdt ? \Carbon\Carbon::parse($project->prj_aprvdt)->format('d M Y') : '--' }}</div>
+                                    <div class="meta-date">{{ optional($project->created_at)->format('d M Y') }}</div>
                                 </div>
 
                                 <div class="timeline-item">
-                                    <div class="progress-segment {{ ($project->prj_startdt) ? 'bg-primary' : 'bg-secondary' }}"></div>
+                                    <div class="progress-segment bg-primary"></div>
                                     <div class="meta-text">Start</div>
-                                    <div class="meta-date">{{ $project->prj_startdt ? \Carbon\Carbon::parse($project->prj_startdt)->format('d M Y') : '--' }}</div>
+                                    <div class="meta-date">{{ \Carbon\Carbon::parse($project->prj_startdt)->format('d M Y') }}</div>
                                 </div>
 
                                 <div class="timeline-item">
                                     <div class="progress-segment {{ $status=='open' ? 'bg-success':'bg-secondary' }}"></div>
-                                    <div class="meta-text">In Progress</div>
+                                    <div class="meta-text">Work In Progress</div>
                                 </div>
 
                                 <div class="timeline-item">
-                                    <div class="progress-segment {{ $status=='closed' ? 'bg-success' : 'bg-secondary' }}"></div>
-                                    <div class="meta-text">Closed</div>
-                                    <div class="meta-date">{{ $project->prj_estenddt ? \Carbon\Carbon::parse($project->prj_estenddt)->format('d M Y') : 'TBD' }}</div>
+                                    <div class="progress-segment bg-secondary"></div>
+                                    <div class="meta-text">Warranty</div>
+                                </div>
+
+                                <div class="timeline-item">
+                                    <div class="progress-segment bg-secondary"></div>
+                                    <div class="meta-text">EDC</div>
+                                    <div class="meta-date">{{ $project->prj_enddt ? \Carbon\Carbon::parse($project->prj_enddt)->format('d M Y') : 'TBD' }}</div>
                                 </div>
                             </div>
 
@@ -237,7 +256,7 @@
         });
     }
 
-    // 2. Filter the Code List
+    // 2. Filter the Code List (Search inside dropdown)
     function filterCodeList(input) {
         const filter = input.value.toUpperCase();
         const divs = document.getElementById('codeListContainer').getElementsByTagName('div');
@@ -268,7 +287,7 @@
         updateSelectedCodes();
     }
 
-    // 4. Handle Main Status Buttons (All/Open/Draft/Closed)
+    // 4. Handle Main Status Buttons (All/Open/Closed)
     function setMainFilter(status, btn) {
         currentMainStatus = status;
         
@@ -279,7 +298,7 @@
         applyFilters();
     }
 
-    // 5. MASTER FILTER FUNCTION (UPDATED)
+    // 5. MASTER FILTER FUNCTION
     function applyFilters() {
         const stageFilter = document.getElementById('stageFilter').value.toLowerCase();
         const dateFrom = document.getElementById('dateFrom').value;
@@ -293,25 +312,17 @@
             
             // Get Data Attributes
             const code = card.dataset.code;
-            const status = card.dataset.status.toLowerCase(); // open/closed/draft
-            const stage = card.dataset.stage.toLowerCase();   
+            const status = card.dataset.status.toLowerCase(); // open/closed
+            const stage = card.dataset.stage.toLowerCase();   // approved/started/etc
             const date = card.dataset.date; // YYYY-MM-DD
 
             // Logic Checks
             let show = true;
 
-            // A. Check Main Status
+            // A. Check Main Status (All/Open/Closed)
             if (currentMainStatus !== 'all') {
-                if (currentMainStatus === 'draft') {
-                    if (status !== 'draft') show = false;
-                }
-                else if (currentMainStatus === 'open') {
-                    // Open mein Draft nahi dikhana, aur Closed nahi dikhana
-                    if (status === 'closed' || status === 'completed' || status === 'draft') show = false;
-                }
-                else if (currentMainStatus === 'closed') {
-                    if (status !== 'closed' && status !== 'completed') show = false;
-                }
+                if (currentMainStatus === 'open' && (status === 'completed' || status === 'closed')) show = false;
+                if (currentMainStatus === 'closed' && (status !== 'completed' && status !== 'closed')) show = false;
             }
 
             // B. Check Code (Multi-Select)
@@ -333,12 +344,14 @@
             if(show) visibleCount++;
         });
         
-        document.getElementById('page-heading').innerHTML = `<i class="fas fa-folder-open mr-1"></i> All Projects (${visibleCount})`;
+        // Update Heading Count (Optional)
+        document.getElementById('page-heading').innerText = `Projects (${visibleCount})`;
     }
 </script>
 
 {{-- STYLES --}}
 <style>
+    /* Styling adjustments for the new layout */
     .project-card {
         border: none;
         border-radius: 12px;
@@ -347,7 +360,6 @@
     }
     .project-card[data-status="open"] { border-left-color: #007bff; }
     .project-card[data-status="closed"] { border-left-color: #28a745; }
-    .project-card[data-status="draft"] { border-left-color: #ffc107; } /* Yellow for Draft */
 
     .project-card:hover {
         transform: translateY(-5px);
@@ -374,12 +386,6 @@
         background-color: #007BFF !important;
         color: #fff !important;
         border-color: #007BFF !important;
-    }
-    /* Draft Button Active State */
-    .btn-group .btn-outline-warning.active {
-        background-color: #ffc107 !important;
-        color: #212529 !important;
-        border-color: #ffc107 !important;
     }
 </style>
 @endsection

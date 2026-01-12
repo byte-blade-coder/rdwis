@@ -234,8 +234,8 @@
             </div>
 
             <div class="form-actions">
-                <button class="btn btn-default mr-2">Back</button>
-                <button type="submit" class="btn btn-primary btn-lg shadow-sm">Release Case</button>
+<button onclick="history.back()" class="btn btn-primary">Back</button>
+                <button type="submit" class="btn btn-primary">Release Case</button>
             </div>
         </div>  
     </div>

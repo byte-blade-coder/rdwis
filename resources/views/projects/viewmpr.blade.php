@@ -1,213 +1,155 @@
 @extends('welcome')
 
 @section('content')
-<div class="content-wrapper">
+<div class="content-wrapper pt-3">
     <style>
-        /* Main Theme Colors */
-        :root {
-            --admin-blue: #007bff;
-            --admin-dark: #343a40;
-            --light-bg: #f4f6f9;
+        /* Layout Styles */
+        .mpr-wrapper { display: flex; gap: 20px; align-items: flex-start; }
+        .mpr-left { flex: 1; }
+        .mpr-right { flex: 0 0 400px; max-width: 400px; display: flex; flex-direction: column; gap: 15px; }
+        .history-scroll-box { max-height: 550px; overflow-y: auto; padding-right: 5px; }
+        
+        /* History Card */
+        .history-item {
+            background: #fff; border-left: 4px solid #17a2b8; border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 10px; padding: 12px; transition: transform 0.2s;
         }
-
-        .mpr-detail-card {
-            background: #fff;
-            margin: 15px;
-            border-top: 4px solid var(--admin-blue);
-            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
-        }
-
-        /* Top Header Section */
-        .mpr-main-header {
-            background: #f8f9fa;
-            padding: 15px;
-            border-bottom: 2px solid #dee2e6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .mpr-title-text { color: var(--admin-dark); font-weight: 700; margin: 0; }
-
-        /* Summary Boxes Layout */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            padding: 15px;
-            background: #fff;
-        }
-
-        .summary-box {
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            min-height: 100px;
-        }
-
-        .summary-box strong { color: var(--admin-blue); display: block; margin-bottom: 5px; border-bottom: 1px solid #eee; }
-        .data-row { display: flex; justify-content: space-between; margin-bottom: 3px; }
-        .data-label { color: #666; font-weight: 500; }
-
-        /* Milestones Table Section */
-        .milestone-section { padding: 0 15px; }
-        .section-label { 
-            background: var(--admin-dark); 
-            color: #fff; 
-            padding: 5px 15px; 
-            font-size: 0.9rem; 
-            font-weight: 600;
-            display: inline-block;
-            border-radius: 4px 4px 0 0;
-        }
-
-        .milestone-table { width: 100%; border-collapse: collapse; border: 1px solid #ddd; font-size: 0.85rem; }
-        .milestone-table th { background: #e9ecef; padding: 8px; border: 1px solid #ddd; text-align: left; }
-        .milestone-table td { padding: 8px; border: 1px solid #ddd; }
-        .milestone-table tr:nth-child(even) { background: #f9f9f9; }
-
-        /* Lower Grid (Progress & Notes) */
-        .lower-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 250px;
-            gap: 15px;
-            padding: 15px;
-        }
-
-        .content-box {
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            height: 300px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .box-header {
-            background: #f4f6f9;
-            padding: 8px 12px;
-            border-bottom: 1px solid #ddd;
-            font-weight: 700;
-            font-size: 0.85rem;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .box-body { padding: 10px; overflow-y: auto; font-size: 0.88rem; line-height: 1.5; color: #444; flex-grow: 1; }
-
-        /* Buttons Styling */
-        .btn-blue-sm { background: var(--admin-blue); color: #fff; border: none; padding: 4px 12px; border-radius: 3px; font-size: 0.8rem; }
-        .btn-blue-sm:hover { background: #0056b3; color: #fff; }
-
-        .btn-group-top .btn { margin-left: 5px; font-weight: 600; font-size: 0.8rem; }
+        .history-item:hover { transform: translateX(3px); }
+        .history-date { font-size: 0.75rem; color: #6c757d; font-weight: 700; text-transform: uppercase; }
+        .history-title { font-weight: 700; color: #343a40; font-size: 0.95rem; margin-bottom: 4px; }
+        .history-desc { font-size: 0.85rem; color: #555; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        
+        .milestone-context-box { background: #fff; border-top: 4px solid #ffc107; border-radius: 4px; padding: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
     </style>
 
-    <div class="mpr-detail-card">
-        <div class="mpr-main-header">
-            <div>
-                <h4 class="mpr-title-text">NIU-HS - Indigenous development of NIU for PNS/M HASHMAT</h4>
-            </div>
-            <div class="btn-group-top">
-                <a href="#" class="btn btn-outline-secondary btn-sm shadow-sm">History</a>
-                <a href="#" class="btn btn-outline-secondary btn-sm shadow-sm">Print</a>
-                <a href="#" class="btn btn-primary btn-sm shadow-sm">Gantt Chart</a>
+    <section class="content">
+        <div class="container-fluid">
+
+            <a href="{{ route('projects.show', $project->prj_id) }}" class="btn btn-sm btn-secondary mb-3 shadow-sm">
+                <i class="fas fa-arrow-left mr-1"></i> Back to Project Details
+            </a>
+
+            <div class="mpr-wrapper">
+                
+                {{-- LEFT SIDE: FORM (Only DB Fields) --}}
+                <div class="mpr-left">
+                    <div class="card card-success card-outline shadow">
+                        <div class="card-header">
+                            <h3 class="card-title text-bold"><i class="fas fa-edit mr-2"></i> Prepare Monthly Report</h3>
+                        </div>
+                        
+                        <form action="{{ route('mpr.store', $project->prj_id) }}" method="POST">
+                            @csrf
+                            <div class="card-body">
+                                
+                                {{-- 1. Date --}}
+                                <div class="form-group">
+                                    <label>Report Date <span class="text-danger">*</span></label>
+                                    <input type="date" name="pgh_dtg" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                </div>
+
+                                {{-- 2. Progress Description --}}
+                                <div class="form-group">
+                                    <label>Work Description <span class="text-danger">*</span></label>
+                                    <textarea name="pgh_progress" class="form-control" rows="10" placeholder="Enter detailed progress update here..." required></textarea>
+                                </div>
+
+                                <div class="alert alert-light border mt-3">
+                                   <small class="text-muted">
+    <i class="fas fa-info-circle mr-1"></i> Author and Level will be auto-recorded as 
+    <strong>
+        {{ Auth::user()->role->rol_desigshort ?? Auth::user()->acc_username }}
+    </strong>.
+</small>
+                                </div>
+
+                            </div>
+                            <div class="card-footer text-right bg-white border-top">
+                                <button type="submit" class="btn btn-success px-4 shadow-sm">
+                                    <i class="fas fa-paper-plane mr-1"></i> Submit Report
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                {{-- RIGHT SIDE: HISTORY & CONTEXT --}}
+                <div class="mpr-right">
+                    
+                    {{-- Active Milestone --}}
+                    <div class="milestone-context-box">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="font-weight-bold m-0 text-dark"><i class="fas fa-crosshairs mr-1 text-warning"></i> Current Target</h6>
+                            @if($currentMilestone)
+                                <span class="badge badge-warning text-white">{{ $currentMilestone->msn_status }}</span>
+                            @else
+                                <span class="badge badge-secondary">No Active Target</span>
+                            @endif
+                        </div>
+                        @if($currentMilestone)
+                            <p class="mb-2 text-dark font-weight-bold" style="font-size: 1.1rem; line-height: 1.2;">{{ Str::limit($currentMilestone->msn_desc, 60) }}</p>
+                            <div class="d-flex justify-content-between text-muted small">
+                                <span><i class="far fa-calendar-alt mr-1"></i> Target:</span>
+                                <span class="font-weight-bold text-danger">{{ \Carbon\Carbon::parse($currentMilestone->msn_targetdt)->format('d M, Y') }}</span>
+                            </div>
+                        @else
+                            <p class="text-muted small">No pending milestones found.</p>
+                        @endif
+                    </div>
+
+                    {{-- History List --}}
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2 px-1">
+                            <h6 class="font-weight-bold text-secondary m-0">Recent Reports</h6>
+                            <span class="badge badge-light border">{{ $mprHistory->count() + 7 }} Records</span>
+                        </div>
+
+                        <div class="history-scroll-box">
+                            
+                            {{-- REAL DATA (Green Border) --}}
+                            @foreach($mprHistory as $history)
+                            <div class="history-item" style="border-left-color: #28a745;">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="history-date">{{ \Carbon\Carbon::parse($history->pgh_dtg)->format('d M, Y') }}</span>
+                                 
+                                    <span class="badge badge-success" style="font-size: 0.7rem;">Saved</span>
+                                </div>
+                                <div class="history-title">Progress Report</div>
+                                <div class="history-desc">{{ $history->pgh_progress }}</div>
+                                <div class="mt-2 text-right"><small class="text-muted font-italic">- {{ $history->pgh_author }}</small></div>
+                            </div>
+                            @endforeach
+
+                            {{-- DUMMY DATA (Grey Border) --}}
+                            @php
+                                $dummies = [
+                                    ['date' => '2025-12-01', 'desc' => 'Completed plinth beam casting for Block A. Curing in progress.'],
+                                    ['date' => '2025-11-01', 'desc' => 'Site clearing and excavation for foundation fully completed.'],
+                                    ['date' => '2025-10-01', 'desc' => 'Machinery mobilized to site. Labor camp setup initiated.'],
+                                    ['date' => '2025-09-01', 'desc' => 'Official site handover meeting conducted with contractor.'],
+                                    ['date' => '2025-08-15', 'desc' => 'Work order issued to M/S Alpha Constructions.'],
+                                    ['date' => '2025-07-20', 'desc' => 'Financial bids opened. Evaluation report submitted.'],
+                                    ['date' => '2025-06-10', 'desc' => 'Administrative approval received from competent authority.'],
+                                ];
+                            @endphp
+
+                            @foreach($dummies as $dummy)
+                            <div class="history-item" style="border-left-color: #dee2e6;">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span class="history-date">{{ \Carbon\Carbon::parse($dummy['date'])->format('d M, Y') }}</span>
+                                    <span class="badge badge-secondary" style="font-size: 0.7rem;">Archived</span>
+                                </div>
+                                <div class="history-title">Past Update</div>
+                                <div class="history-desc">{{ $dummy['desc'] }}</div>
+                            </div>
+                            @endforeach
+
+                        </div>
+                    </div>
+
+                </div> 
             </div>
         </div>
-
-        <div class="summary-grid">
-            <div class="summary-box">
-                <strong>Scope</strong>
-                <p>Indigenous development of NIU for PNS/M HASHMAT</p>
-            </div>
-            <div class="summary-box">
-                <strong>Details</strong>
-                <div class="data-row"><span class="data-label">Sponsor:</span> <span>DSMM</span></div>
-                <div class="data-row"><span class="data-label">Status:</span> <span class="badge badge-warning">Work in progress</span></div>
-            </div>
-            <div class="summary-box">
-                <strong>Timeline</strong>
-                <div class="data-row"><span class="data-label">Receipt Date:</span> <span>19 Jan 22</span></div>
-                <div class="data-row"><span class="data-label">Approval Date:</span> <span>19 Jan 22</span></div>
-                <div class="data-row"><span class="data-label">EDC:</span> <span>19 Jul 22</span></div>
-            </div>
-            <div class="summary-box">
-                <strong>Cost (PKR)</strong>
-                <div class="data-row"><span class="data-label">Proposed:</span> <span>16,000,000</span></div>
-                <div class="data-row"><span class="data-label">Approved:</span> <span>16,000,000</span></div>
-                <div class="data-row"><span class="data-label">Funds:</span> <span>16,000,000</span></div>
-            </div>
-        </div>
-
-        <div class="milestone-section">
-            <div class="section-label">Milestones</div>
-            <table class="milestone-table">
-                <thead>
-                    <tr>
-                        <th>S</th>
-                        <th>Type</th>
-                        <th>Description</th>
-                        <th>Target Date</th>
-                        <th>%</th>
-                        <th>Achieved Date</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Milestone</td>
-                        <td>Submission of GPP and list of deliverables</td>
-                        <td>04 Feb 22</td>
-                        <td>100</td>
-                        <td>25 Jan 22</td>
-                        <td><span class="text-success font-weight-bold">Completed</span></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Milestone</td>
-                        <td>Submission of CDR</td>
-                        <td>21 Feb 22</td>
-                        <td>100</td>
-                        <td>25 Jan 22</td>
-                        <td><span class="text-success font-weight-bold">Completed</span></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="lower-grid">
-            <div class="content-box">
-                <div class="box-header">
-                    <span>Last Finalized Progress</span>
-                    <span class="text-muted" style="font-weight: 400;">28-Apr-23 08:38</span>
-                </div>
-                <div class="box-body">
-                    1. Milestones 1 and 2 have been completed and accepted.<br><br>
-                    2. Milestone 3 (installation of non-rugged prototype) is also complete, and trials have been completed.<br><br>
-                    3. Final installations of rugged system has been completed on 28 Nov 22.
-                </div>
-            </div>
-
-            <div class="content-box">
-                <div class="box-header">
-                    <span>Current Progress</span>
-                    <button class="btn-blue-sm">Create</button>
-                </div>
-                <div class="box-body text-muted italic">
-                    Click "Create" to add current month progress updates...
-                </div>
-            </div>
-
-            <div class="content-box">
-                <div class="box-header">
-                    <span>Sticky Notes</span>
-                    <i class="fas fa-sticky-note text-warning"></i>
-                </div>
-                <div class="box-body" style="background: #fff9c4;">
-                    <textarea class="form-control" style="background: transparent; border: none; height: 100%; resize: none;" placeholder="Type notes here..."></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
+    </section>
 </div>
 @endsection
