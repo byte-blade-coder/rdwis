@@ -148,20 +148,21 @@
 
                         <div class="card-body p-3">
 
-                            {{-- PROJECT HEADER --}}
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h5 class="mb-0 text-primary font-weight-bold" style="font-size: 1.1rem;">{{ $project->prj_code }}</h5>
-                                    <div class="text-dark" style="font-size: 0.9rem;">{{ $project->prj_title }}</div>
+{{-- PROJECT HEADER --}}
+<div class="d-flex justify-content-between align-items-center">
+    <div>
+        <h3 class="mb-1 text-primary">{{ $project->prj_code }}</h3>
+        <div class="text-muted font-weight-bold">{{ $project->prj_title }}</div>
 
-                                    @php
-                                        $badge = match($status){
-                                            'open'   => 'badge-primary',
-                                            'closed' => 'badge-success',
-                                            'draft'  => 'badge-warning',
-                                            default  => 'badge-secondary'
-                                        };
-                                    @endphp
+        @php
+            $badge = match($status) {
+                'open'      => 'badge-primary',
+                'closed'    => 'badge-success',
+                'draft'     => 'badge-warning',
+                'cancelled' => 'badge-danger',   // Added Cancelled
+                default     => 'badge-secondary'
+            };
+        @endphp
 
                                     <span class="badge {{ $badge }} px-2 py-1 mt-1" style="border-radius: 4px; font-size: 0.7rem;">
                                         {{ strtoupper($project->prj_status) }}
